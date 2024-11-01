@@ -1,7 +1,76 @@
-<h1>Delete Employee</h1>
-<p>Are you sure you want to delete {{ employee.first_name }} {{ employee.last_name }}?</p>
-<form action="" method="post">
-    {% csrf_token %}
-    <input type="submit" value="Confirm">
-</form>
-<a href="{% url 'employee_list' %}">Back to list</a>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Confirm Delete</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    <style>
+        body {    
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          background-color: #ffffff;
+          margin: 0;
+          padding: 0;
+          color: #312c51;
+          line-height: 1.6;
+        }
+
+        h1 {    
+          text-align: center;
+          color: #1f0806; /* Lighter red for headings */
+          margin-top: 20px;
+          margin-bottom: 20px;
+        }
+
+        .container {    
+          background-color: #ffffff;
+          padding: 20px;
+          border-radius: 8px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+          width: 50%;
+          margin: 50px auto;
+          text-align: center;
+        }
+
+        button {    
+          background-color: #e74c3c; /* Lighter red for confirm button */
+          color: white;
+          padding: 12px 24px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          margin-top: 20px;
+          transition: background-color 0.3s ease;
+        }
+
+        button:hover {    
+          background-color: #c0392b;
+        }
+
+        a.btn {    
+          background-color: #2ecc71; /* Light green for back button */
+          color: white;
+          padding: 10px 20px;
+          text-decoration: none;
+          border-radius: 4px;
+          display: inline-block;
+          margin-top: 10px;
+          transition: background-color 0.3s ease;
+        }
+
+        a.btn:hover {    
+          background-color: #27ae60; /* Slightly darker green on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Delete Employee</h1>
+        <p>Are you sure you want to delete {{ employee.first_name }} {{ employee.last_name }}?</p>
+        <form action="" method="post">
+            {% csrf_token %}
+            <button type="submit">Confirm</button>
+        </form>
+        <a href="{% url 'employee_list' %}" class="btn">Back to list</a>
+    </div>
+</body>
+</html>
