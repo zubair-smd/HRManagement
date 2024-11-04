@@ -1,8 +1,8 @@
 version: '3'
 services:
   hrmanagement:
-    image: hrmanagement:latest
-    container_name: hrmanagement
+    image: hrmanage:latest
+    container_name: hrmanage
     ports:
       - "8000:8000"
     restart: unless-stopped
