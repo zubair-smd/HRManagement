@@ -1,0 +1,15 @@
+[MASTER]
+load-plugins=pylint_django
+django-settings-module=HRManagement.settings
+
+[FORMAT]
+max-line-length=120
+
+[MESSAGES CONTROL]
+disable=C0111,R0903,C0103,C0330,R0912,R0915,W0613,R0914,R0904,C0415,R0801,W0511,C0413
+
+[DESIGN]
+max-parents=13
+
+[TYPECHECK]
+generated-members=REQUEST,acl_users,aq_parent,"[a-zA-Z]+_set{1,2}",save,delete
