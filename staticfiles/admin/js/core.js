@@ -119,7 +119,7 @@ class DateFormatter {
         for (let i = 0; i < formatString.length; i++) {
             if (formatString[i] === '%' && i + 1 < formatString.length) {
                 result += fields[formatString[i + 1]] || '';
-                i++;
+                i++; // Fix: increment `i` correctly to skip the next character
             } else {
                 result += formatString[i];
             }
