@@ -1,184 +1,157 @@
-// Core JavaScript helper functions
 'use strict';
 
-// quickElement(tagType, parentReference [, textInChildNode, attribute, attributeValue ...]);
-function quickElement() {
-    const obj = document.createElement(arguments[0]);
-    if (arguments[2]) {
-        const textNode = document.createTextNode(arguments[2]);
-        obj.appendChild(textNode);
-    }
-    const len = arguments.length;
-    for (let i = 3; i < len; i += 2) {
-        obj.setAttribute(arguments[i], arguments[i + 1]);
-    }
-    arguments[1].appendChild(obj);
-    return obj;
-}
-
-// "a" is reference to an object
-function removeChildren(a) {
-    while (a.hasChildNodes()) {
-        a.removeChild(a.lastChild);
-    }
-}
-
-// ----------------------------------------------------------------------------
-// Find-position functions by PPK
-// See https://www.quirksmode.org/js/findpos.html
-// ----------------------------------------------------------------------------
-function findPosX(obj) {
-    let curleft = 0;
-    if (obj.offsetParent) {
-        while (obj.offsetParent) {
-            curleft += obj.offsetLeft - obj.scrollLeft;
-            obj = obj.offsetParent;
+class DOMUtils {
+    static createElement(tagType, parent, textContent = null, ...attributes) {
+        const element = document.createElement(tagType);
+        if (textContent !== null) {
+            element.textContent = textContent;
         }
-    } else if (obj.x) {
-        curleft += obj.x;
-    }
-    return curleft;
-}
-
-function findPosY(obj) {
-    let curtop = 0;
-    if (obj.offsetParent) {
-        while (obj.offsetParent) {
-            curtop += obj.offsetTop - obj.scrollTop;
-            obj = obj.offsetParent;
+        for (let i = 0; i < attributes.length; i += 2) {
+            element.setAttribute(attributes[i], attributes[i + 1]);
         }
-    } else if (obj.y) {
-        curtop += obj.y;
+        parent.appendChild(element);
+        return element;
     }
-    return curtop;
+
+    static removeChildren(element) {
+        while (element.firstChild) {
+            element.removeChild(element.firstChild);
+        }
+    }
+
+    static getPosition(element) {
+        let position = { x: 0, y: 0 };
+        let current = element;
+
+        while (current) {
+            if (current.offsetParent) {
+                position.x += current.offsetLeft - current.scrollLeft;
+                position.y += current.offsetTop - current.scrollTop;
+                current = current.offsetParent;
+            } else {
+                position.x += current.x || 0;
+                position.y += current.y || 0;
+                break;
+            }
+        }
+        return position;
+    }
 }
 
-//-----------------------------------------------------------------------------
-// Date object extensions
-// ----------------------------------------------------------------------------
-{
-    Date.prototype.getTwelveHours = function() {
-        return this.getHours() % 12 || 12;
-    };
+class DateFormatter {
+    constructor(date) {
+        this.date = date instanceof Date ? date : new Date(date);
+    }
 
-    Date.prototype.getTwoDigitMonth = function() {
-        return (this.getMonth() < 9) ? '0' + (this.getMonth() + 1) : (this.getMonth() + 1);
-    };
+    static padTwoDigits(num) {
+        return String(num).padStart(2, '0');
+    }
 
-    Date.prototype.getTwoDigitDate = function() {
-        return (this.getDate() < 10) ? '0' + this.getDate() : this.getDate();
-    };
+    getTwelveHours() {
+        return this.date.getHours() % 12 || 12;
+    }
 
-    Date.prototype.getTwoDigitTwelveHour = function() {
-        return (this.getTwelveHours() < 10) ? '0' + this.getTwelveHours() : this.getTwelveHours();
-    };
+    getFormattedMonth() {
+        return DateFormatter.padTwoDigits(this.date.getMonth() + 1);
+    }
 
-    Date.prototype.getTwoDigitHour = function() {
-        return (this.getHours() < 10) ? '0' + this.getHours() : this.getHours();
-    };
+    getFormattedDate() {
+        return DateFormatter.padTwoDigits(this.date.getDate());
+    }
 
-    Date.prototype.getTwoDigitMinute = function() {
-        return (this.getMinutes() < 10) ? '0' + this.getMinutes() : this.getMinutes();
-    };
+    getFormattedTwelveHour() {
+        return DateFormatter.padTwoDigits(this.getTwelveHours());
+    }
 
-    Date.prototype.getTwoDigitSecond = function() {
-        return (this.getSeconds() < 10) ? '0' + this.getSeconds() : this.getSeconds();
-    };
+    getFormattedHour() {
+        return DateFormatter.padTwoDigits(this.date.getHours());
+    }
 
-    Date.prototype.getAbbrevDayName = function() {
-        return typeof window.CalendarNamespace === "undefined"
-            ? '0' + this.getDay()
-            : window.CalendarNamespace.daysOfWeekAbbrev[this.getDay()];
-    };
+    getFormattedMinute() {
+        return DateFormatter.padTwoDigits(this.date.getMinutes());
+    }
 
-    Date.prototype.getFullDayName = function() {
-        return typeof window.CalendarNamespace === "undefined"
-            ? '0' + this.getDay()
-            : window.CalendarNamespace.daysOfWeek[this.getDay()];
-    };
+    getFormattedSecond() {
+        return DateFormatter.padTwoDigits(this.date.getSeconds());
+    }
 
-    Date.prototype.getAbbrevMonthName = function() {
-        return typeof window.CalendarNamespace === "undefined"
-            ? this.getTwoDigitMonth()
-            : window.CalendarNamespace.monthsOfYearAbbrev[this.getMonth()];
-    };
+    getDayName(abbreviated = false) {
+        if (!window.CalendarNamespace) {
+            return DateFormatter.padTwoDigits(this.date.getDay());
+        }
+        return abbreviated 
+            ? window.CalendarNamespace.daysOfWeekAbbrev[this.date.getDay()]
+            : window.CalendarNamespace.daysOfWeek[this.date.getDay()];
+    }
 
-    Date.prototype.getFullMonthName = function() {
-        return typeof window.CalendarNamespace === "undefined"
-            ? this.getTwoDigitMonth()
-            : window.CalendarNamespace.monthsOfYear[this.getMonth()];
-    };
+    getMonthName(abbreviated = false) {
+        if (!window.CalendarNamespace) {
+            return this.getFormattedMonth();
+        }
+        return abbreviated
+            ? window.CalendarNamespace.monthsOfYearAbbrev[this.date.getMonth()]
+            : window.CalendarNamespace.monthsOfYear[this.date.getMonth()];
+    }
 
-    Date.prototype.strftime = function(format) {
+    format(formatString) {
         const fields = {
-            a: this.getAbbrevDayName(),
-            A: this.getFullDayName(),
-            b: this.getAbbrevMonthName(),
-            B: this.getFullMonthName(),
-            c: this.toString(),
-            d: this.getTwoDigitDate(),
-            H: this.getTwoDigitHour(),
-            I: this.getTwoDigitTwelveHour(),
-            m: this.getTwoDigitMonth(),
-            M: this.getTwoDigitMinute(),
-            p: (this.getHours() >= 12) ? 'PM' : 'AM',
-            S: this.getTwoDigitSecond(),
-            w: '0' + this.getDay(),
-            x: this.toLocaleDateString(),
-            X: this.toLocaleTimeString(),
-            y: ('' + this.getFullYear()).substr(2, 4),
-            Y: '' + this.getFullYear(),
+            a: this.getDayName(true),
+            A: this.getDayName(false),
+            b: this.getMonthName(true),
+            B: this.getMonthName(false),
+            c: this.date.toString(),
+            d: this.getFormattedDate(),
+            H: this.getFormattedHour(),
+            I: this.getFormattedTwelveHour(),
+            m: this.getFormattedMonth(),
+            M: this.getFormattedMinute(),
+            p: this.date.getHours() >= 12 ? 'PM' : 'AM',
+            S: this.getFormattedSecond(),
+            w: DateFormatter.padTwoDigits(this.date.getDay()),
+            x: this.date.toLocaleDateString(),
+            X: this.date.toLocaleTimeString(),
+            y: String(this.date.getFullYear()).slice(-2),
+            Y: String(this.date.getFullYear()),
             '%': '%'
         };
-        let result = '', i = 0;
-        while (i < format.length) {
-            if (format.charAt(i) === '%') {
-                result += fields[format.charAt(i + 1)];
-                ++i;
+
+        let result = '';
+        for (let i = 0; i < formatString.length; i++) {
+            if (formatString[i] === '%' && i + 1 < formatString.length) {
+                result += fields[formatString[i + 1]] || '';
+                i++;
+            } else {
+                result += formatString[i];
             }
-            else {
-                result += format.charAt(i);
-            }
-            ++i;
         }
         return result;
-    };
+    }
 
-    // ----------------------------------------------------------------------------
-    // String object extensions
-    // ----------------------------------------------------------------------------
-    String.prototype.strptime = function(format) {
-        const split_format = format.split(/[.\-/]/);
-        const date = this.split(/[.\-/]/);
-        let i = 0;
+    static parseDate(dateString, format) {
+        const formatParts = format.split(/[.\-/]/);
+        const dateParts = dateString.split(/[.\-/]/);
         let day, month, year;
-        while (i < split_format.length) {
-            switch (split_format[i]) {
-            case "%d":
-                day = date[i];
-                break;
-            case "%m":
-                month = date[i] - 1;
-                break;
-            case "%Y":
-                year = date[i];
-                break;
-            case "%y":
-                // A %y value in the range of [00, 68] is in the current
-                // century, while [69, 99] is in the previous century,
-                // according to the Open Group Specification.
-                if (parseInt(date[i], 10) >= 69) {
-                    year = date[i];
-                } else {
-                    year = (new Date(Date.UTC(date[i], 0))).getUTCFullYear() + 100;
-                }
-                break;
+
+        formatParts.forEach((part, index) => {
+            const value = parseInt(dateParts[index], 10);
+            switch (part) {
+                case "%d":
+                    day = value;
+                    break;
+                case "%m":
+                    month = value - 1;
+                    break;
+                case "%Y":
+                    year = value;
+                    break;
+                case "%y":
+                    year = value >= 69 ? 1900 + value : 2000 + value;
+                    break;
             }
-            ++i;
-        }
-        // Create Date object from UTC since the parsed value is supposed to be
-        // in UTC, not local time. Also, the calendar uses UTC functions for
-        // date extraction.
+        });
+
         return new Date(Date.UTC(year, month, day));
-    };
+    }
 }
+
+export { DOMUtils, DateFormatter };
