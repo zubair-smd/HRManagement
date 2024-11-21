@@ -7,17 +7,15 @@ ENV PYTHONUNBUFFERED 1
 # Set the working directory in the container
 WORKDIR /app
 
-# Install dependencies (gcc for psycopg2, libpq-dev for PostgreSQL)
+# Install system dependencies and Python dependencies in one layer
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     gcc \
     libpq-dev \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install Python dependencies
-RUN pip install --upgrade pip \
-    && pip install django==5.1.2 psycopg2-binary djangorestframework==3.15.2 sqlparse==0.5.1 tzdata==2024.2
+    && rm -rf /var/lib/apt/lists/* \
+    && pip install --upgrade pip \
+    && pip install djangorestframework==3.15.2 django==5.1.2 psycopg2-binary sqlparse==0.5.1 tzdata==2024.2
 
 # Create a new user to run the application
 RUN useradd -m django-user
