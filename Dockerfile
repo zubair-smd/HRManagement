@@ -15,7 +15,7 @@ RUN apt-get update && \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && pip install --upgrade pip \
-    && pip install djangorestframework==3.15.2 django==5.1.2 psycopg2-binary sqlparse==0.5.1 tzdata==2024.2
+    && pip install djangorestframework==3.15.2 django==4.2.16 psycopg2-binary sqlparse==0.5.1 tzdata==2024.2
 
 # Create a new user to run the application
 RUN useradd -m django-user
