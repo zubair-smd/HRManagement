@@ -1,13 +1,13 @@
-# Use an official Python runtime as a parent image
-FROM python:3.9-slim
+FROM python:3.12
 
-# Set environment variables
-ENV PYTHONUNBUFFERED 1
+# Set environment variables with the new format
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
 
 # Set the working directory in the container
 WORKDIR /app
 
-# Install system dependencies and Python dependencies in one layer
+# Install system dependencies and Python dependencies in one layer, sorted alphanumerically
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     gcc \
@@ -15,7 +15,7 @@ RUN apt-get update && \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && pip install --upgrade pip \
-    && pip install djangorestframework==3.15.2 django==4.2.16 psycopg2-binary sqlparse==0.5.1 tzdata==2024.2
+    && pip install django==4.2.16 djangorestframework==3.15.2 psycopg2-binary sqlparse==0.5.1 tzdata==2024.2
 
 # Create a new user to run the application
 RUN useradd -m django-user
@@ -25,17 +25,17 @@ USER django-user
 
 # Copy the current directory contents into the container at /app
 # Ensure proper ownership by django-user:django-user
-COPY --chown=django-user:django-user . .
+COPY --chown=django-user:django-user . /app/
 
-# Make sure files are read-only and directories are executable
-RUN find . -type f -exec chmod 444 {} \; && \
-    find . -type d -exec chmod 555 {} \;
+# Install dependencies from requirements.txt (if you have any dependencies specified here)
+COPY requirements.txt /app/
+RUN pip install -r requirements.txt
+
+# Collect static files
+RUN python manage.py collectstatic --noinput
 
 # Expose the port the app runs on
 EXPOSE 8000
 
-# Set the environment variable for the Django settings module
-ENV DJANGO_SETTINGS_MODULE=hrmanage.settings
-
-# Run the Django development server
+# Command to run the application
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
