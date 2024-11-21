@@ -271,9 +271,6 @@ body.popup .submit-row {
 
 .submit-row a.deletelink {
     margin-left: auto;
-}
-
-.submit-row a.deletelink {
     display: block;
     background: var(--delete-button-bg);
     border-radius: 4px;
@@ -493,9 +490,6 @@ body.popup .submit-row {
     vertical-align: middle;
     background-repeat: no-repeat;
     background-size: 14px;
-}
-
-.related-lookup {
     width: 1rem;
     height: 1rem;
     background-image: url(../img/search.svg);
