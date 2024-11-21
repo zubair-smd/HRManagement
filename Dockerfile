@@ -19,9 +19,8 @@ USER django-user
 # Copy the application files, with read-only permissions for files
 COPY --chown=django-user:django-user . .
 
-# Make sure copied files are read-only
-RUN find . -type f -exec chmod 444 {} \; \
-    # Ensure directories are executable
+# Make sure copied files are read-only and directories are executable
+RUN find . -type f -exec chmod 444 {} \; && \
     find . -type d -exec chmod 555 {} \;
 
 # Expose port 8000
