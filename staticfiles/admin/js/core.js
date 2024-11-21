@@ -116,14 +116,23 @@ class DateFormatter {
         };
 
         let result = '';
+        let skipNext = false;
+
         for (let i = 0; i < formatString.length; i++) {
+            if (skipNext) {
+                // Skip this iteration and reset the flag
+                skipNext = false;
+                continue;
+            }
+
             if (formatString[i] === '%' && i + 1 < formatString.length) {
                 result += fields[formatString[i + 1]] || '';
-                i++; // Fix: increment `i` correctly to skip the next character
+                skipNext = true; // Indicate to skip the next character
             } else {
                 result += formatString[i];
             }
         }
+
         return result;
     }
 
