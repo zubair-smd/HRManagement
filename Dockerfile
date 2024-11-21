@@ -21,12 +21,20 @@ RUN useradd -m django-user
 
 # Copy requirements first and install dependencies
 COPY requirements.txt /app/
-RUN pip install --no-cache-dir django==4.2.16 \
+RUN pip install --no-cache-dir \
+    asgiref==3.8.1 \
+    Django==5.1.2 \
     djangorestframework==3.15.2 \
-    psycopg2-binary \
     sqlparse==0.5.1 \
     tzdata==2024.2 \
-    gunicorn
+    coverage==7.4.0 \
+    pytest==8.0.0 \
+    pytest-django==4.7.0 \
+    pytest-cov==4.1.0 \
+    pylint==3.0.3 \
+    pylint-django==2.5.5 \
+    gunicorn \
+    psycopg2-binary
 
 # Switch to the non-root user
 USER django-user

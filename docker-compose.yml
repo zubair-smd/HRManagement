@@ -1,33 +1,10 @@
 version: '3.8'
-
 services:
   web:
-    image: zubair275/hrmanage:latest
+    image: zubair275/hrmanage:latest 
     restart: always
-    user: "999:999"  # Match UID:GID from Dockerfile
-    environment:
-      - DJANGO_SETTINGS_MODULE=your_project.settings
-      - DJANGO_ALLOWED_HOSTS=46.51.134.19,localhost,127.0.0.1
-      - DEBUG=0
     ports:
       - "8000:8000"
-    volumes:
-      - static_volume:/app/staticfiles:ro
-      - media_volume:/app/media:ro
-    security_opt:
-      - no-new-privileges:true
-    read_only: true
-    tmpfs:
-      - /tmp
-      - /var/run
-    deploy:
-      resources:
-        limits:
-          cpus: '1'
-          memory: 500M
-
-volumes:
-  static_volume:
-    driver: local
-  media_volume:
-    driver: local
+    environment:
+      - DEBUG=0
+      - ALLOWED_HOSTS=46.51.134.19,localhost,127.0.0.1
