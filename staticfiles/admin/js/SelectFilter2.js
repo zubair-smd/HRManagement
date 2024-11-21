@@ -51,7 +51,7 @@
                 title: interpolate(gettext('Type into this box to filter down the list of available %s.'), [field_name])
             });
             filter_p.appendChild(document.createTextNode(' '));
-            const filter_input = this.createElement('input', filter_p, '', {
+            this.createElement('input', filter_p, '', {
                 type: 'text',
                 placeholder: gettext('Filter'),
                 id: `${field_id}_input`
@@ -101,13 +101,13 @@
                 title: interpolate(gettext('Type into this box to filter down the list of selected %s.'), [field_name])
             });
             filter_selected_p.appendChild(document.createTextNode(' '));
-            const filter_selected_input = this.createElement('input', filter_selected_p, '', {
+            this.createElement('input', filter_selected_p, '', {
                 type: 'text',
                 placeholder: gettext('Filter'),
                 id: `${field_id}_selected_input`
             });
 
-            const to_box = this.createElement('select', selector_chosen, '', {
+            this.createElement('select', selector_chosen, '', {
                 id: `${field_id}_to`,
                 multiple: '',
                 size: from_box.size,
