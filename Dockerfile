@@ -13,10 +13,7 @@ RUN apt-get update && \
 
 USER django-user
 
-COPY --chown=django-user:django-user --chmod=444 requirements.txt manage.py ./
-COPY --chown=django-user:django-user --chmod=444 HRMANAGEMENT/ ./HRMANAGEMENT/
-COPY --chown=django-user:django-user --chmod=444 employees/ ./employees/
-COPY --chown=django-user:django-user --chmod=444 staticfiles/ ./staticfiles/
+COPY --chown=django-user:django-user --chmod=444 . .
 
 EXPOSE 8000
 
