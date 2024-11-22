@@ -8,7 +8,7 @@ services:
       - "8000:8000"
     environment:
       - DEBUG=0
-      - DJANGO_SETTINGS_MODULE=core.settings
+      - DJANGO_SETTINGS_MODULE=HRManagement.settings
       - ALLOWED_HOSTS=46.51.134.19,localhost,127.0.0.1
     volumes:
       - static_volume:/app/staticfiles
@@ -25,10 +25,6 @@ services:
       - sonarqube_data:/opt/sonarqube/data
       - sonarqube_extensions:/opt/sonarqube/extensions
       - sonarqube_logs:/opt/sonarqube/logs
-    ulimits:
-      nofile:
-        soft: 65536
-        hard: 65536
 
 volumes:
   static_volume:
