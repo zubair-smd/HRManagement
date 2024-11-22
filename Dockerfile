@@ -10,6 +10,7 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         gcc \
         libpq-dev \
+        postgresql-client \
         python3-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
@@ -22,6 +23,7 @@ USER django-user
 COPY --chown=django-user:django-user requirements.txt .
 
 RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir psycopg2-binary && \
     pip install --no-cache-dir -r requirements.txt
 
 COPY --chown=django-user:django-user . .
