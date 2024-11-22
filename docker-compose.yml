@@ -1,10 +1,20 @@
 version: '3.8'
 services:
   web:
-    image: zubair275/hrmanage:latest 
+    container_name: hrmanage
+    image: hrmanagement:none
     restart: always
     ports:
       - "8000:8000"
     environment:
       - DEBUG=0
+      - DJANGO_SETTINGS_MODULE=core.settings
       - ALLOWED_HOSTS=46.51.134.19,localhost,127.0.0.1
+
+  sonarqube:
+    container_name: sonarqube-server
+    image: sonarqube:latest
+    ports:
+      - "9000:9000"
+    environment:
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
