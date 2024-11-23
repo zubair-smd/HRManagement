@@ -9,11 +9,13 @@ ENV PYTHONUNBUFFERED=1 \
 # Set the working directory in the container
 WORKDIR /app
 
-# Install system dependencies
+# Install system dependencies and PostgreSQL dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         gcc \
+        postgresql-client \
         libpq-dev \
+        python3-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -27,8 +29,8 @@ COPY . /app/
 # Collect static files
 RUN python manage.py collectstatic --noinput
 
-# Make port 8000 available
+# Expose port 8000
 EXPOSE 8000
 
-# Use gunicorn for production
+# Start gunicorn
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "HRManagement.wsgi:application"]
