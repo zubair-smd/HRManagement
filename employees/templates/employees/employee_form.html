@@ -1,21 +1,54 @@
+<!-- employee_form.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Add employee</title>
-   {% load static %}
-   <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    <title>{{ action }} Employee</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-   <div id="navbar">
-       <a href="{% url 'employee_list' %}">Employee List</a>
-   </div>
-   <h1>{{ action }}</h1>
-   <form id="employeeForm" method="POST">
-       {% csrf_token %}
-       {{ form.as_p }}
-       <button type="submit">{{ action }}</button>
-   </form>
+    <div id="header">
+        <div id="title-section">
+            <img src="{% static 'images/HR.png' %}" alt="HR Icon" class="icon">
+            <h2>HR Management System</h2>
+        </div>
+        <a href="{% url 'employee_list' %}" class="back-btn">← Back to List</a>
+    </div>
+
+    <div class="form-container">
+        <h1>{{ action }} Employee</h1>
+        <form method="POST" class="employee-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_name">Name:</label>
+                <input type="text" id="id_name" name="name" required class="form-control" value="{{ form.name.value|default:'' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="id_department">Department:</label>
+                <input type="text" id="id_department" name="department" required class="form-control" value="{{ form.department.value|default:'' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="id_position">Position:</label>
+                <input type="text" id="id_position" name="position" required class="form-control" value="{{ form.position.value|default:'' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="id_hire_date">Hire Date:</label>
+                <input type="date" id="id_hire_date" name="hire_date" required class="form-control" value="{{ form.hire_date.value|date:'Y-m-d'|default:'' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="id_email">Email:</label>
+                <input type="email" id="id_email" name="email" required class="form-control" value="{{ form.email.value|default:'' }}">
+            </div>
+
+            <div class="form-buttons">
+                <button type="submit" class="btn-primary">{{ action }} Employee</button>
+                <a href="{% url 'employee_list' %}" class="btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
 </body>
 </html>

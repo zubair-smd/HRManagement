@@ -4,38 +4,47 @@ FROM python:3.12-slim
 # Set environment variables
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    DEBUG=0
+    DEBUG=True \
+    DJANGO_SECRET_KEY="django-insecure-lirh1ypw#8&kjb@gql+jp6gd+7s4-ko70k-^7@q0__m_45l2fn" \
+    ALLOWED_HOSTS="*"
 
-# Create a new user and group for non-root execution
-RUN addgroup --system nonroot && adduser --system --group nonroot
+# Create a non-root user
+RUN groupadd -r django && \
+    useradd -r -g django django && \
+    mkdir /app && \
+    chown django:django /app
 
-# Set the working directory in the container
-WORKDIR /app
-
-# Install system dependencies and PostgreSQL dependencies
+# Install system dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        build-essential \
-        gcc \
-        libpq-dev \
-        postgresql-client \
-        python3-dev \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    build-essential \
+    gcc \
+    libpq-dev \
+    python3-dev \
+    postgresql \
+    postgresql-client \
+    procps \
+    && apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-# Copy only the requirements file and install dependencies
-COPY requirements.txt /app/
+WORKDIR /app
+
+# Copy requirements first for better caching
+COPY --chown=django:django requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy only the necessary project files into the container
-COPY ./app /app/app
-COPY ./manage.py /app/
+# Copy the project code
+COPY --chown=django:django . /app/
 
-# Change the ownership of the app directory to the non-root user
-RUN chown -R nonroot:nonroot /app
+# Create necessary directories
+RUN mkdir -p /app/static /app/media /app/staticfiles /app/templates && \
+    chown -R django:django /app
 
-# Switch to the non-root user
-USER nonroot
+# Collect static files
+RUN python manage.py collectstatic --noinput
+
+# Switch to non-root user
+USER django
 
 # Expose port 8000
 EXPOSE 8000

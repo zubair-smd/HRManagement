@@ -40,3 +40,9 @@ logs/
 # Local development
 local_settings.py
 docker-compose.override.yml
+
+
+# Exclude staticfiles directory but allow the necessary parts
+staticfiles/*
+!staticfiles/admin/
+!staticfiles/images/
