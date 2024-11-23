@@ -1,11 +1,42 @@
+# Git
 .git
 .gitignore
+
+# Environment
 .env
+venv/
+*.env
+
+# Python
 *.pyc
-__pycache__
-.pytest_cache
+__pycache__/
+.pytest_cache/
 .coverage
-htmlcov
+htmlcov/
+
+# Database
 *.sqlite3
+db.sqlite3
+
+# Media and Static
 media/
 staticfiles/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Build
+dist/
+build/
+*.egg-info/
+
+# Logs
+*.log
+logs/
+
+# Local development
+local_settings.py
+docker-compose.override.yml

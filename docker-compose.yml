@@ -1,35 +1,10 @@
 version: '3.8'
-
 services:
   web:
-    container_name: hrmanage
-    image: hrmanage:latest
+    image: hrmanage:latest 
     restart: always
     ports:
       - "8000:8000"
     environment:
-      DEBUG: 0
-      DJANGO_SETTINGS_MODULE: HRManagement.settings
-      ALLOWED_HOSTS: 46.51.134.19,localhost,127.0.0.1
-    volumes:
-      - static_volume:/app/staticfiles
-      - media_volume:/app/media
-
-  sonarqube:
-    container_name: sonarqube
-    image: sonarqube:latest
-    ports:
-      - "9000:9000"
-    environment:
-      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
-    volumes:
-      - sonarqube_data:/opt/sonarqube/data
-      - sonarqube_extensions:/opt/sonarqube/extensions
-      - sonarqube_logs:/opt/sonarqube/logs
-
-volumes:
-  static_volume:
-  media_volume:
-  sonarqube_data:
-  sonarqube_extensions:
-  sonarqube_logs:
+      - DEBUG=0
+      - ALLOWED_HOSTS=46.51.134.19,localhost,127.0.0.1
