@@ -1,38 +1,20 @@
-FROM python:3.12-slim
+# Use an official Python runtime as a parent image
+FROM python:3.9-slim
 
-# Environment variables
-ENV PYTHONUNBUFFERED=1 \
-    DJANGO_SETTINGS_MODULE=HRManagement.settings
-
-# Set working directory
+# Set the working directory in the container
 WORKDIR /app
 
-# Install dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    gcc \
-    libpq-dev \
-    postgresql-client \
-    python3-dev && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# Copy the current directory contents into the container at /app
+COPY . /app
 
-# Create Django user
-RUN useradd -m -d /app django-user && \
-    chown -R django-user:django-user /app
+# Install any needed packages specified in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-USER django-user
-
-# Install Python dependencies
-COPY --chown=django-user:django-user requirements.txt ./
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir psycopg2-binary && \
-    pip install --no-cache-dir -r requirements.txt
-
-# Copy project files
-COPY --chown=django-user:django-user . .
-
-# Expose application port
+# Make port 8000 available to the world outside the container
 EXPOSE 8000
 
-# Use Gunicorn for production
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "HRManagement.wsgi:application"]
+# Define environment variable
+ENV NAME HRManagement
+
+# Run the application
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
