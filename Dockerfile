@@ -6,6 +6,9 @@ ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     DEBUG=0
 
+# Create a new user and group for non-root execution
+RUN addgroup --system nonroot && adduser --system --group nonroot
+
 # Set the working directory in the container
 WORKDIR /app
 
@@ -15,19 +18,24 @@ RUN apt-get update && \
         build-essential \
         gcc \
         libpq-dev \
-        postgresql \
         postgresql-client \
         python3-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy and install requirements separately
+# Copy only the requirements file and install dependencies
 COPY requirements.txt /app/
-RUN pip install --no-cache-dir psycopg2-binary==2.9.9 && \
-    pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the project code into the container
-COPY . /app/
+# Copy only the necessary project files into the container
+COPY ./app /app/app
+COPY ./manage.py /app/
+
+# Change the ownership of the app directory to the non-root user
+RUN chown -R nonroot:nonroot /app
+
+# Switch to the non-root user
+USER nonroot
 
 # Expose port 8000
 EXPOSE 8000

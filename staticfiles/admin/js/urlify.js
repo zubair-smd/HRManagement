@@ -22,17 +22,20 @@
             );
         }
 
-        // Remove leading and trailing spaces
-        s = s.replace(/^(\s+)|(\s+)$/g, ''); // Use explicit groups for leading/trailing spaces
+        // Remove leading spaces using non-greedy match
+        s = s.replace(/^\s+/, ''); // Remove leading spaces
+
+        // Remove trailing spaces using non-greedy match
+        s = s.replace(/\s+$/, ''); // Remove trailing spaces
 
         // Replace consecutive spaces or hyphens with a single hyphen
-        s = s.replace(/([\s\-]+)/g, '-'); // Group to emphasize the combination of spaces and hyphens
+        s = s.replace(/[\s\-]+/g, '-'); // Replace multiple spaces or hyphens with a single hyphen
 
         // Trim to specified length
         s = s.substring(0, num_chars);
 
-        // Remove trailing hyphens
-        return s.replace(/(-+)$/g, ''); // Explicit grouping for trailing hyphens
+        // Remove trailing hyphens efficiently
+        return s.replace(/-+$/, ''); // Remove trailing hyphens
     }
 
     window.URLify = URLify;
