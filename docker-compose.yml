@@ -1,10 +1,11 @@
 version: '3.8'
 services:
   web:
-    image: zubair275/hrmanage:latest 
+    image: hrmanage:latest 
     restart: always
     ports:
       - "8000:8000"
     environment:
-      - DEBUG=0
+      - DEBUG=False
+      - DJANGO_SECRET_KEY=)-q*gw@^c7)%0-_c84(5wl@8ecek%n$4yx_u%02p8ro5&os+^7
       - ALLOWED_HOSTS=46.51.134.19,localhost,127.0.0.1
