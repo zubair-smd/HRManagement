@@ -13,24 +13,24 @@ WORKDIR /app
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         gcc \
+        postgresql \
         postgresql-client \
         libpq-dev \
         python3-dev \
+        build-essential \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first for better caching
+# Copy and install requirements separately
 COPY requirements.txt /app/
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir psycopg2-binary==2.9.9 && \
+    pip install --no-cache-dir -r requirements.txt
 
 # Copy the project code into the container
 COPY . /app/
-
-# Collect static files
-RUN python manage.py collectstatic --noinput
 
 # Expose port 8000
 EXPOSE 8000
 
 # Start gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "HRManagement.wsgi:application"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
