@@ -12,12 +12,12 @@ WORKDIR /app
 # Install system dependencies and PostgreSQL dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
+        build-essential \
         gcc \
+        libpq-dev \
         postgresql \
         postgresql-client \
-        libpq-dev \
         python3-dev \
-        build-essential \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -32,5 +32,5 @@ COPY . /app/
 # Expose port 8000
 EXPOSE 8000
 
-# Start gunicorn
+# Start the application
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
