@@ -6,7 +6,7 @@ class Employee(models.Model):
     department = models.CharField(max_length=100)
     position = models.CharField(max_length=100)
     hire_date = models.DateField()
-    email = models.EmailField()
+    email = models.EmailField(default='noreply@company.com', null=False)
 
     def __str__(self):
         return self.name
