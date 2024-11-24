@@ -33,12 +33,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy only necessary files with explicit paths
 COPY --chown=root:root --chmod=644 manage.py /app/
 COPY --chown=root:root --chmod=644 HRManagement/ /app/HRManagement/
-COPY --chown=root:root --chmod=644 apps/ /app/apps/
-COPY --chown=root:root --chmod=644 templates/ /app/templates/
-COPY --chown=root:root --chmod=644 static/ /app/static/
+COPY --chown=root:root --chmod=644 employees/ /app/employees/
 
-# Create directories with proper permissions
-RUN mkdir -p /app/media /app/staticfiles && \
+# Create all necessary directories first
+RUN mkdir -p /app/static /app/media /app/staticfiles /app/templates && \
     chown -R django:django /app/static /app/media /app/staticfiles /app/templates && \
     chmod -R 755 /app/static /app/media /app/staticfiles /app/templates
 
