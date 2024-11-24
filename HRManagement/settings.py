@@ -1,13 +1,26 @@
 from pathlib import Path
 import os
 
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+# Load secret key from secrets.txt
+try:
+    with open(os.path.join(BASE_DIR, 'secrets.txt')) as f:
+        for line in f:
+            if line.startswith('DJANGO_SECRET_KEY='):
+                SECRET_KEY = line.split('=')[1].strip()
+                break
+except FileNotFoundError:
+    raise ImproperlyConfigured("secrets.txt file not found")
+except Exception as e:
+    raise ImproperlyConfigured(f"Error loading secret key: {str(e)}")
 
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+
+# Rest of your settings remain the same...
 
 INSTALLED_APPS = [
     'django.contrib.admin',
