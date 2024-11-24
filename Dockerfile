@@ -1,7 +1,9 @@
 # Use an official Python runtime as a parent image
 FROM python:3.12-slim
 
-# Set non-secret environment variables
+# Add build argument and ensure it's not persisted in final image
+ARG DJANGO_SECRET_KEY
+ENV DJANGO_SECRET_KEY=""
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     DEBUG=False \
@@ -17,6 +19,7 @@ RUN groupadd -r django && \
         build-essential \
         gcc \
         libpq-dev \
+        postgresql \
         postgresql-client \
         procps \
         python3-dev && \
@@ -25,6 +28,7 @@ RUN groupadd -r django && \
 
 WORKDIR /app
 
+# Copy requirements first for better caching
 # Copy requirements with read-only permissions
 COPY --chown=django:django --chmod=644 requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
@@ -35,8 +39,7 @@ COPY --chown=django:django --chmod=644 . /app/
 # Create directories and set minimum necessary permissions
 RUN mkdir -p /app/static /app/media /app/staticfiles /app/templates && \
     chown -R django:django /app && \
-    chmod -R 755 /app/static /app/media /app/staticfiles /app/templates && \
-    python manage.py collectstatic --noinput
+    chmod -R 755 /app/static /app/media /app/staticfiles /app/templates
 
 # Switch to non-root user
 USER django
@@ -45,4 +48,4 @@ USER django
 EXPOSE 8000
 
 # Start the application
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "HRManagement.wsgi:application"]
+CMD ["gunicorn", "--workers", "3", "--bind", "0.0.0.0:8000", "HRManagement.wsgi:application"]
