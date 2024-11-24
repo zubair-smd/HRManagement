@@ -1,48 +1,90 @@
-# Git
+# Version Control
 .git
 .gitignore
+.gitattributes
 
 # Environment
 .env
+.env.*
 venv/
+env/
+ENV/
 *.env
 
 # Python
 *.pyc
+*.pyo
+*.pyd
 __pycache__/
+.Python
 .pytest_cache/
 .coverage
+coverage.xml
+*.cover
 htmlcov/
+.tox/
+.nox/
 
 # Database
 *.sqlite3
+*.sqlite
+*.db
 db.sqlite3
 
-# Media and Static
-media/
-staticfiles/
-
-# IDE
+# Development and IDE
 .idea/
 .vscode/
 *.swp
 *.swo
+*.swn
+*~
+.DS_Store
 
-# Build
+# Build and Packaging
 dist/
 build/
 *.egg-info/
+*.egg
+wheels/
+*.manifest
+*.spec
 
-# Logs
+# Logs and Debugging
 *.log
 logs/
+debug.log
+npm-debug.log*
 
-# Local development
+# Local Development
 local_settings.py
 docker-compose.override.yml
+docker-compose.*.yml
 
+# Django Specific
+/static/
+!/static/favicon.ico
+/media/*
+!/media/.gitkeep
 
-# Exclude staticfiles directory but allow the necessary parts
-staticfiles/*
-!staticfiles/admin/
-!staticfiles/images/
+# Test files
+test.*
+tests/
+testing/
+
+# Documentation
+docs/
+*.md
+README*
+
+# Temporary files
+*.bak
+*.tmp
+*.temp
+.*.swp
+*~
+
+# Node (if using frontend)
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log

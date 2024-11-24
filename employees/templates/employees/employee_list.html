@@ -1,52 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Employee List</title>
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
-</head>
-<body>
-    <div id="header">
-        <div id="title-section">
-            <img src="{% static 'images/HR.png' %}" alt="HR Icon" class="icon">
-            <h2>HR Management System</h2>
-        </div>
-        <a href="{% url 'employee_create' %}" class="add-employee-btn">+ Add Employee</a>
-    </div>
+<!-- employees/templates/employees/employee_list.html -->
+{% extends "base.html" %}
+{% load static %}
 
-    <h1>Employee List</h1>
-    
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Department</th>
-                    <th>Position</th>
-                    <th>Hire Date</th>
-                    <th>Email</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for employee in employees %}
-                <tr>
-                    <td>{{ employee.name }}</td>
-                    <td>{{ employee.department }}</td>
-                    <td>{{ employee.position }}</td>
-                    <td>{{ employee.hire_date|date:"M d, Y" }}</td>
-                    <td>{{ employee.email }}</td>
-                    <td>
-                        <a href="{% url 'employee_update' employee.pk %}" class="btn">Edit</a>
-                        <form method="POST" action="{% url 'employee_delete' employee.pk %}" style="display: inline;">
-                            {% csrf_token %}
-                            <button type="submit" class="btn-danger" onclick="return confirm('Are you sure you want to delete this employee?')">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+{% block content %}
+<header id="header">
+    <div id="title-section">
+        <img src="{% static 'images/HR.png' %}" alt="HR Icon" class="icon">
+        <h2>HR Management System</h2>
     </div>
-</body>
-</html>
+    <a href="{% url 'employees:employee_create_form' %}" class="add-employee-btn">+ Add Employee</a>
+</header>
+
+<h1>Employee List</h1>
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Department</th>
+                <th>Position</th>
+                <th>Hire Date</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for employee in employees %}
+            <tr>
+                <td>{{ employee.name }}</td>
+                <td>{{ employee.department }}</td>
+                <td>{{ employee.position }}</td>
+                <td>{{ employee.hire_date|date:"M d, Y" }}</td>
+                <td>{{ employee.email }}</td>
+                <td class="actions">
+                    <a href="{% url 'employees:employee_update_form' employee.pk %}" class="btn btn-edit">Edit</a>
+                    <a href="{% url 'employees:employee_delete_confirm' employee.pk %}" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center">No employees found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

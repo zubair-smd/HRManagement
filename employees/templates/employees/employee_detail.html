@@ -1,29 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Employee Details</title>
-   {% load static %}
-   <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
-</head>
-<body>
-   <div id="navbar">
-       <a href="{% url 'employee_list' %}">Employee List</a>
-       <a href="{% url 'employee_create' %}">Add Employee</a>
-   </div>
-   <h1>{{ employee.first_name }} {{ employee.last_name }}</h1>
-   <div class="employee-details">
-       <p><strong>Position:</strong> {{ employee.position }}</p>
-       <p><strong>Department:</strong> {{ employee.department }}</p>
-       <p><strong>Hire Date:</strong> {{ employee.hire_date }}</p>
-       <p><strong>Email:</strong> {{ employee.email }}</p>
-   </div>
-   <a href="{% url 'employee_update' employee.pk %}" class="btn">Edit</a>
-   <form action="{% url 'employee_delete' employee.pk %}" method="post" class="inline-form">
-       {% csrf_token %}
-       <input type="submit" value="Delete" class="btn-danger">
-   </form>
-   <a href="{% url 'employee_list' %}" class="btn">Back to list</a>
-</body>
-</html>
+{% extends 'base.html' %}
+{% block content %}
+<nav id="navbar">
+    <a href="{% url 'employee_list' %}">Employee List</a>
+    <a href="{% url 'employee_create_form' %}">Add Employee</a>
+</nav>
+
+<h1>{{ employee.first_name }} {{ employee.last_name }}</h1>
+
+<div class="employee-details">
+    <p><strong>Position:</strong> {{ employee.position }}</p>
+    <p><strong>Department:</strong> {{ employee.department }}</p>
+    <p><strong>Hire Date:</strong> {{ employee.hire_date }}</p>
+    <p><strong>Email:</strong> {{ employee.email }}</p>
+</div>
+
+<div class="action-buttons">
+    <a href="{% url 'employee_update_form' employee.pk %}" class="btn">Edit</a>
+    <a href="{% url 'employee_delete_confirm' employee.pk %}" class="btn btn-danger">Delete</a>
+    <a href="{% url 'employee_list' %}" class="btn">Back to list</a>
+</div>
+{% endblock %}

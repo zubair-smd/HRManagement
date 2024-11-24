@@ -491,9 +491,7 @@ input[type="submit"], button {
     }
 
     #changelist-filter {
-        position: static;
-        width: auto;
-        margin-top: 30px;
+        margin-left: 0;
     }
 
     #changelist .actions label {
@@ -509,7 +507,11 @@ input[type="submit"], button {
         flex: 1 0 100%;
     }
 
-    
+    #changelist-filter {
+        position: static;
+        width: auto;
+        margin-top: 30px;
+    }
 
     .object-tools {
         float: none;

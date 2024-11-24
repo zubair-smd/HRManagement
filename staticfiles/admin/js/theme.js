@@ -14,39 +14,28 @@
         const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
         if (prefersDark) {
-            handleDarkPreference(currentTheme);
-            return;
-        }
-        handleLightPreference(currentTheme);
-    }
-
-    function handleDarkPreference(currentTheme) {
-        switch (currentTheme) {
-            case "auto":
+            // Auto (dark) -> Light -> Dark
+            if (currentTheme === "auto") {
                 setTheme("light");
-                break;
-            case "light":
+            } else if (currentTheme === "light") {
                 setTheme("dark");
-                break;
-            default:
+            } else {
                 setTheme("auto");
-        }
-    }
-
-    function handleLightPreference(currentTheme) {
-        switch (currentTheme) {
-            case "auto":
+            }
+        } else {
+            // Auto (light) -> Dark -> Light
+            if (currentTheme === "auto") {
                 setTheme("dark");
-                break;
-            case "dark":
+            } else if (currentTheme === "dark") {
                 setTheme("light");
-                break;
-            default:
+            } else {
                 setTheme("auto");
+            }
         }
     }
 
     function initTheme() {
+        // set theme defined in localStorage if there is one, or fallback to auto mode
         const currentTheme = localStorage.getItem("theme");
         currentTheme ? setTheme(currentTheme) : setTheme("auto");
     }

@@ -1,17 +1,21 @@
-{% extends 'base.html' %}  {# If you have a base template #}
-
+<!-- employees/templates/employees/employee_confirm_delete.html -->
+{% extends "base.html" %}
 {% load static %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
-
-<div class="table-container">
+<div class="container">
     <h1>Delete Employee</h1>
-    <p>Are you sure you want to delete?</p>
-    <form action="" method="post" class="inline-form">
-        {% csrf_token %}
-        <button type="submit" class="btn-danger">Confirm</button>
-    </form>
-    <a href="{% url 'employee_list' %}" class="btn">Back to list</a>
+    <div class="confirmation-box">
+        <p>Are you sure you want to delete the employee "{{ employee.name }}"?</p>
+        <p>This action cannot be undone.</p>
+        
+        <form method="post" action="{% url 'employees:employee_delete' employee.pk %}">
+            {% csrf_token %}
+            <div class="button-group">
+                <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                <a href="{% url 'employees:employee_list' %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}
