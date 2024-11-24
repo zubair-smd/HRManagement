@@ -1,14 +1,10 @@
 # Use an official Python runtime as a parent image
 FROM python:3.12-slim
 
-# Add build argument for Django secret key
-ARG DJANGO_SECRET_KEY
-
-# Set environment variables
+# Set non-secret environment variables
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     DEBUG=False \
-    DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY} \
     ALLOWED_HOSTS="46.51.134.19,localhost,127.0.0.1"
 
 # Create non-root user and install system dependencies
@@ -21,7 +17,6 @@ RUN groupadd -r django && \
         build-essential \
         gcc \
         libpq-dev \
-        postgresql \
         postgresql-client \
         procps \
         python3-dev && \
@@ -30,16 +25,17 @@ RUN groupadd -r django && \
 
 WORKDIR /app
 
-# Copy requirements first for better caching
-COPY --chown=django:django requirements.txt /app/
+# Copy requirements with read-only permissions
+COPY --chown=django:django --chmod=644 requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the project code
-COPY --chown=django:django . /app/
+# Copy project code with read-only permissions
+COPY --chown=django:django --chmod=644 . /app/
 
-# Create directories, set permissions and collect static files
+# Create directories and set minimum necessary permissions
 RUN mkdir -p /app/static /app/media /app/staticfiles /app/templates && \
     chown -R django:django /app && \
+    chmod -R 755 /app/static /app/media /app/staticfiles /app/templates && \
     python manage.py collectstatic --noinput
 
 # Switch to non-root user
