@@ -5,7 +5,7 @@ FROM python:3.12-slim
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     DEBUG=True \
-    DJANGO_SECRET_KEY="django-insecure-lirh1ypw#8&kjb@gql+jp6gd+7s4-ko70k-^7@q0__m_45l2fn" \
+    DDJANGO_SECRET_KEY=${DJANGO_SECRET_KEY} \
     ALLOWED_HOSTS="*"
 
 # Create a non-root user
