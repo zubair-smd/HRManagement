@@ -1,9 +1,6 @@
-# Use an official Python runtime as a parent image
 FROM python:3.12-slim
 
-# Add build argument and ensure it's not persisted in final image
-ARG DJANGO_SECRET_KEY
-ENV DJANGO_SECRET_KEY=""
+# Environment variables (non-sensitive)
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     DEBUG=False \
@@ -13,13 +10,13 @@ ENV PYTHONUNBUFFERED=1 \
 RUN groupadd -r django && \
     useradd -r -g django django && \
     mkdir /app && \
-    chown django:django /app && \
+    chown root:root /app && \
+    chmod 755 /app && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
         build-essential \
         gcc \
         libpq-dev \
-        postgresql \
         postgresql-client \
         procps \
         python3-dev && \
@@ -28,17 +25,16 @@ RUN groupadd -r django && \
 
 WORKDIR /app
 
-# Copy requirements first for better caching
-# Copy requirements with read-only permissions
-COPY --chown=django:django --chmod=644 requirements.txt /app/
+# Copy requirements with root ownership and read-only permissions
+COPY --chown=root:root --chmod=644 requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy project code with read-only permissions
-COPY --chown=django:django --chmod=644 . /app/
+# Copy project code with root ownership and read-only permissions
+COPY --chown=root:root --chmod=644 . /app/
 
-# Create directories and set minimum necessary permissions
+# Create directories with proper permissions
 RUN mkdir -p /app/static /app/media /app/staticfiles /app/templates && \
-    chown -R django:django /app && \
+    chown -R django:django /app/static /app/media /app/staticfiles /app/templates && \
     chmod -R 755 /app/static /app/media /app/staticfiles /app/templates
 
 # Switch to non-root user
