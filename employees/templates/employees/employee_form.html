@@ -1,44 +1,54 @@
-<!-- employees/templates/employees/employee_form.html -->
 {% extends "base.html" %}
 {% load static %}
 
 {% block content %}
-<header id="header">
-    <div id="title-section">
-        <img src="{% static 'images/HR.png' %}" alt="HR Icon" class="icon">
-        <h2>HR Management System</h2>
+<div class="container">
+    <div class="header-section">
+        <div class="logo-title">
+            <img src="{% static 'images/HR.png' %}" alt="HR" class="logo">
+            <h1>HR Management System</h1>
+        </div>
+        <a href="{% url 'employees:employee_list' %}" class="back-button">← Back to List</a>
     </div>
-    <a href="{% url 'employees:employee_list' %}" class="back-btn">← Back to List</a>
-</header>
 
-<div class="form-container">
-    <h1>{{ action }} Employee</h1>
-    
-    {% if action == 'Add' %}
-    <form method="post" action="{% url 'employees:employee_create' %}">
-    {% else %}
-    <form method="post" action="{% url 'employees:employee_update' employee.pk %}">
-    {% endif %}
-        {% csrf_token %}
+    <div class="form-card">
+        <h2>{{ action }} Employee</h2>
         
-        {% for field in form %}
-        <div class="form-group">
-            <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
-            {{ field }}
-            {% if field.errors %}
-                <div class="error-message">
-                    {% for error in field.errors %}
-                        <div>{{ error }}</div>
-                    {% endfor %}
+        <form method="post" action="{% if action == 'Add' %}{% url 'employees:employee_create' %}{% else %}{% url 'employees:employee_update' employee.pk %}{% endif %}">
+            {% csrf_token %}
+            
+            <div class="form-grid">
+                <div class="form-field">
+                    <label for="id_name">Name</label>
+                    {{ form.name }}
                 </div>
-            {% endif %}
-        </div>
-        {% endfor %}
 
-        <div class="form-buttons">
-            <button type="submit" class="btn-primary">{{ action }} Employee</button>
-            <a href="{% url 'employees:employee_list' %}" class="btn-secondary">Cancel</a>
-        </div>
-    </form>
+                <div class="form-field">
+                    <label for="id_department">Department</label>
+                    {{ form.department }}
+                </div>
+
+                <div class="form-field">
+                    <label for="id_position">Position</label>
+                    {{ form.position }}
+                </div>
+
+                <div class="form-field">
+                    <label for="id_hire_date">Hire Date</label>
+                    {{ form.hire_date }}
+                </div>
+
+                <div class="form-field">
+                    <label for="id_email">Email</label>
+                    {{ form.email }}
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="button button-primary">{{ action }} Employee</button>
+                <a href="{% url 'employees:employee_list' %}" class="button button-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}

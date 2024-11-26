@@ -1,17 +1,14 @@
-<!-- employees/templates/employees/employee_list.html -->
 {% extends "base.html" %}
 {% load static %}
 
 {% block content %}
-<header id="header">
-    <div id="title-section">
-        <img src="{% static 'images/HR.png' %}" alt="HR Icon" class="icon">
-        <h2>HR Management System</h2>
+<div id="header">
+    <div class="logo-container">
+        <img src="{% static 'images/HR.png' %}" alt="HR Icon" class="hr-icon">
+        <h1>HR Management System</h1>
     </div>
     <a href="{% url 'employees:employee_create_form' %}" class="add-employee-btn">+ Add Employee</a>
-</header>
-
-<h1>Employee List</h1>
+</div>
 
 <div class="table-container">
     <table>
@@ -37,10 +34,6 @@
                     <a href="{% url 'employees:employee_update_form' employee.pk %}" class="btn btn-edit">Edit</a>
                     <a href="{% url 'employees:employee_delete_confirm' employee.pk %}" class="btn btn-danger">Delete</a>
                 </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="6" class="text-center">No employees found.</td>
             </tr>
             {% endfor %}
         </tbody>
