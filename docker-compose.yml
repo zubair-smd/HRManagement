@@ -4,7 +4,7 @@ services:
   web:
     build: .
     ports:
-      - "8000:8000"
+      - "80:8000"
     environment:
       - DEBUG=False
       - ALLOWED_HOSTS=46.51.134.19,localhost,127.0.0.1
