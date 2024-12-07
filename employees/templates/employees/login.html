@@ -1,11 +1,11 @@
-{% extends "base.html" %}
+{% extends 'employees/base.html' %}
 {% load static %}
 
 {% block content %}
 <div class="login-container">
     <div class="login-box">
+        <img src="{% static 'hr_app/images/HR.png' %}" alt="HR Icon" class="login-icon">
         <h2>HR Management System</h2>
-        <img src="{% static 'images/HR.png' %}" alt="HR Icon" class="login-icon">
         
         <form method="post">
             {% csrf_token %}

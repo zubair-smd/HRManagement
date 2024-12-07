@@ -32,3 +32,5 @@ for emp_id in duplicates:
 conn.commit()
 conn.close()
 print("Duplicates fixed!")
+
+

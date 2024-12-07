@@ -1,15 +1,7 @@
-{% extends "base.html" %}
+{% extends 'employees/base.html' %}
 {% load static %}
 
 {% block content %}
-<div id="header">
-    <div class="logo-container">
-        <img src="{% static 'images/HR.png' %}" alt="HR Icon" class="hr-icon">
-        <h1>HR Management System</h1>
-    </div>
-    <a href="{% url 'employees:employee_create_form' %}" class="add-employee-btn">+ Add Employee</a>
-</div>
-
 <div class="table-container">
     <table>
         <thead>

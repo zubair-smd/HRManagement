@@ -1,16 +1,8 @@
-{% extends "base.html" %}
+{% extends 'employees/base.html' %}
 {% load static %}
 
 {% block content %}
 <div class="container">
-    <div class="header-section">
-        <div class="logo-title">
-            <img src="{% static 'images/HR.png' %}" alt="HR" class="logo">
-            <h1>HR Management System</h1>
-        </div>
-        <a href="{% url 'employees:employee_list' %}" class="back-button">← Back to List</a>
-    </div>
-
     <div class="form-card">
         <h2>{{ action }} Employee</h2>
         
@@ -45,8 +37,8 @@
             </div>
 
             <div class="form-actions">
-                <button type="submit" class="button button-primary">{{ action }} Employee</button>
-                <a href="{% url 'employees:employee_list' %}" class="button button-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">{{ action }} Employee</button>
+                <a href="{% url 'employees:employee_list' %}" class="btn btn-secondary">Cancel</a>
             </div>
         </form>
     </div>
