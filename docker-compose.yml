@@ -6,9 +6,7 @@ services:
     ports:
       - "80:8000"
     environment:
-      - DEBUG=False
-      - ALLOWED_HOSTS=3.251.65.76,localhost,127.0.0.1
-      - DJANGO_SECRET_KEY=)-q*gw@^c7)%0-_c84(5wl@8ecek%n$4yx_u%02p8ro5&os+^7
+      - .env
     volumes:
       - static_volume:/app/static
       - media_volume:/app/media
