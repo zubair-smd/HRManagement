@@ -14,7 +14,6 @@ services:
       - media_volume:/app/media
       - ./secrets.txt:/app/secrets.txt
 
-
 volumes:
   static_volume:
   media_volume:

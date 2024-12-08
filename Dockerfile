@@ -1,3 +1,4 @@
+# Dockerfile
 FROM python:3.12-slim
 
 # Environment variables (non-sensitive)
@@ -14,12 +15,12 @@ RUN groupadd -r django && \
     chmod 755 /app && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
-        build-essential \
-        gcc \
-        libpq-dev \
-        postgresql-client \
-        procps \
-        python3-dev && \
+    build-essential \
+    gcc \
+    libpq-dev \
+    postgresql-client \
+    procps \
+    python3-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -48,3 +49,4 @@ EXPOSE 8000
 
 # Start the application
 CMD ["gunicorn", "--workers", "3", "--bind", "0.0.0.0:8000", "HRManagement.wsgi:application"]
+
