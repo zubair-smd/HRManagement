@@ -4,7 +4,7 @@ FROM python:3.12-slim
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     DEBUG=False \
-    ALLOWED_HOSTS="46.51.134.19,localhost,127.0.0.1"
+    ALLOWED_HOSTS="3.251.65.76,localhost,127.0.0.1"
 
 # Create non-root user and install system dependencies
 RUN groupadd -r django && \
