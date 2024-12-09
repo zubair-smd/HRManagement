@@ -1,4 +1,3 @@
-# Use a lightweight Python image with minimal build packages
 FROM python:3.12-slim
 
 ENV PYTHONUNBUFFERED=1 \
@@ -6,7 +5,6 @@ ENV PYTHONUNBUFFERED=1 \
     DEBUG=False \
     ALLOWED_HOSTS="3.251.65.76,localhost,127.0.0.1"
 
-# Install system dependencies
 RUN groupadd -r django && \
     useradd -r -g django django && \
     mkdir /app && \
@@ -27,13 +25,13 @@ WORKDIR /app
 
 # Copy requirements with root ownership and read-only permissions
 COPY requirements.txt /app/
-
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy only necessary files with explicit paths
+# Copy necessary files including the database file
 COPY . /app/
+COPY /home/ec2-user/hrmanagement/db.sqlite3 /app/db.sqlite3
 
-# Create all necessary directories with appropriate ownership and permissions
+# Create necessary directories with appropriate permissions
 RUN mkdir -p /app/static /app/media && \
     chown -R django:django /app/static /app/media && \
     chmod -R 755 /app/static /app/media
