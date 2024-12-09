@@ -23,8 +23,9 @@ except Exception as e:
    raise ImproperlyConfigured(f"Error loading secret key: {str(e)}")
 
 # Core Settings
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['3.251.65.76', 'localhost', '127.0.0.1'])
-DEBUG = False
+ALLOWED_HOSTS = ['*']
+DEBUG = True
+SECURE_SSL_REDIRECT = False
 
 # Application definition
 INSTALLED_APPS = [
@@ -124,11 +125,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 
-# Production Security Settings
-if not DEBUG:
-   SECURE_SSL_REDIRECT = True
-   SESSION_COOKIE_SECURE = True
-   CSRF_COOKIE_SECURE = True
-   SECURE_BROWSER_XSS_FILTER = True
-   SECURE_CONTENT_TYPE_NOSNIFF = True
-   X_FRAME_OPTIONS = 'DENY'
+# # Production Security Settings
+# if not DEBUG:
+#    SECURE_SSL_REDIRECT = True
+#    SESSION_COOKIE_SECURE = True
+#    CSRF_COOKIE_SECURE = True
+#    SECURE_BROWSER_XSS_FILTER = True
+#    SECURE_CONTENT_TYPE_NOSNIFF = True
+#    X_FRAME_OPTIONS = 'DENY'

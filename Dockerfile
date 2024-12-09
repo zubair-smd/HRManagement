@@ -2,7 +2,9 @@ FROM python:3.12-slim
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    DEBUG=False
+    DEBUG=True \
+    ALLOWED_HOSTS=* \
+    DJANGO_SECRET_KEY=)-q*gw@^c7)%0-_c84(5wl@8ecek%n\$4yx_u%02p8ro5&os+^7
 
 WORKDIR /app
 
