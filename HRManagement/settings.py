@@ -23,8 +23,8 @@ except Exception as e:
    raise ImproperlyConfigured(f"Error loading secret key: {str(e)}")
 
 # Core Settings
-ALLOWED_HOSTS = ['3.251.65.76', 'localhost', '127.0.0.1']
-DEBUG = False  
+ALLOWED_HOSTS = []
+DEBUG = True 
 
 # Application definition
 INSTALLED_APPS = [

@@ -1,13 +1,12 @@
-# Dockerfile
+# Use a lightweight Python image with minimal build packages
 FROM python:3.12-slim
 
-# Environment variables (non-sensitive)
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     DEBUG=False \
     ALLOWED_HOSTS="3.251.65.76,localhost,127.0.0.1"
 
-# Create non-root user and install system dependencies
+# Install system dependencies
 RUN groupadd -r django && \
     useradd -r -g django django && \
     mkdir /app && \
@@ -27,19 +26,17 @@ RUN groupadd -r django && \
 WORKDIR /app
 
 # Copy requirements with root ownership and read-only permissions
-COPY --chown=root:root --chmod=644 requirements.txt /app/
+COPY requirements.txt /app/
 
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy only necessary files with explicit paths
-COPY --chown=root:root --chmod=644 manage.py /app/
-COPY --chown=root:root --chmod=644 HRManagement/ /app/HRManagement/
-COPY --chown=root:root --chmod=644 employees/ /app/employees/
+COPY . /app/
 
-# Create all necessary directories first
-RUN mkdir -p /app/static /app/media /app/staticfiles /app/templates && \
-    chown -R django:django /app/static /app/media /app/staticfiles /app/templates && \
-    chmod -R 755 /app/static /app/media /app/staticfiles /app/templates
+# Create all necessary directories with appropriate ownership and permissions
+RUN mkdir -p /app/static /app/media && \
+    chown -R django:django /app/static /app/media && \
+    chmod -R 755 /app/static /app/media
 
 # Switch to non-root user
 USER django
@@ -49,4 +46,3 @@ EXPOSE 8000
 
 # Start the application
 CMD ["gunicorn", "--workers", "3", "--bind", "0.0.0.0:8000", "HRManagement.wsgi:application"]
-
