@@ -22,8 +22,10 @@ except FileNotFoundError:
 except Exception as e:
    raise ImproperlyConfigured(f"Error loading secret key: {str(e)}")
 
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://127.0.0.1:8000', 'http://3.251.65.76:8000']
+
 # Core Settings
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '3.251.65.76']
 DEBUG = True
 SECURE_SSL_REDIRECT = False
 
@@ -114,9 +116,9 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Authentication Settings
-LOGIN_URL = 'employees:login'
+LOGIN_URL = '/'  # Change this from 'employees:login'
 LOGIN_REDIRECT_URL = 'employees:employee_list'
-LOGOUT_REDIRECT_URL = 'employees:login'
+LOGOUT_REDIRECT_URL = '/'
 
 # Default Primary Key Field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
