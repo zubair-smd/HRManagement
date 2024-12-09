@@ -1,16 +1,17 @@
-version: '3.8'
-
 services:
   web:
     build: .
     ports:
-      - "80:8000"
-    environment:
-      - .env
+      - "8080:8000"
     volumes:
+      - ./staticfiles:/app/staticfiles
       - static_volume:/app/static
       - media_volume:/app/media
-      - ./secrets.txt:/app/secrets.txt
+      - ./db.sqlite3:/app/db.sqlite3
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py collectstatic --noinput &&
+             gunicorn --bind 0.0.0.0:8000 HRManagement.wsgi:application"
 
 volumes:
   static_volume:

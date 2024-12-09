@@ -23,8 +23,8 @@ except Exception as e:
    raise ImproperlyConfigured(f"Error loading secret key: {str(e)}")
 
 # Core Settings
-ALLOWED_HOSTS = []
-DEBUG = True 
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['3.251.65.76', 'localhost', '127.0.0.1'])
+DEBUG = False
 
 # Application definition
 INSTALLED_APPS = [
@@ -70,10 +70,10 @@ WSGI_APPLICATION = 'HRManagement.wsgi.application'
 
 # Database configuration
 DATABASES = {
-   'default': {
-       'ENGINE': 'django.db.backends.sqlite3',
-       'NAME': BASE_DIR / 'db.sqlite3',
-   }
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
 
 # Password validation
@@ -94,9 +94,9 @@ USE_TZ = True
 # Static and Media Files Configuration
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    BASE_DIR / 'employees' / 'static'
+    os.path.join(BASE_DIR, 'employees/static')
 ]
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 # Static files finder configuration
 STATICFILES_FINDERS = [
@@ -110,7 +110,7 @@ if DEBUG:
 
 # Media files configuration
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Authentication Settings
 LOGIN_URL = 'employees:login'
