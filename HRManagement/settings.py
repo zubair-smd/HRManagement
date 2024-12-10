@@ -101,11 +101,12 @@ USE_TZ = True
 
 # Static and Media Files Configuration
 # Static and Media Files Configuration
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [
+STATIC_URL = 'static/'
+"""STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'employees/static')
-]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+]"""
+STATIC_ROOT = 'static'
+"""os.path.join(BASE_DIR, 'staticfiles')"""
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Static files finder configuration
