@@ -26,7 +26,7 @@ CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://127.0.0.1:8000', 'http:
 
 # Core Settings
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '3.251.65.76']
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 SECURE_SSL_REDIRECT = False
 
 # Application definition
@@ -75,7 +75,7 @@ WSGI_APPLICATION = 'HRManagement.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'data', 'db.sqlite3'),
     }
 }
 
