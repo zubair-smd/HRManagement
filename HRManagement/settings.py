@@ -5,6 +5,8 @@ from django.core.exceptions import ImproperlyConfigured
 
 # Build paths
 BASE_DIR = Path(__file__).resolve().parent.parent
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insure-)-q*gw@^c7)%0-_c84(5wl@8ecek%n$4yx_u%02p8ro5&os+^7
+')
 
 # Initialize environment variables
 env = environ.Env()
@@ -26,7 +28,7 @@ CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://127.0.0.1:8000', 'http:
 
 # Core Settings
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '3.251.65.76']
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+DEBUG = True
 SECURE_SSL_REDIRECT = False
 
 # Application definition
@@ -75,7 +77,7 @@ WSGI_APPLICATION = 'HRManagement.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'data', 'db.sqlite3'),
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -116,9 +118,9 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Authentication Settings
-LOGIN_URL = '/'  # Change this from 'employees:login'
-LOGIN_REDIRECT_URL = 'employees:employee_list'
-LOGOUT_REDIRECT_URL = '/'
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/employees/'
+LOGOUT_REDIRECT_URL = '/login/'
 
 # Default Primary Key Field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -129,9 +131,12 @@ MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 # # Production Security Settings
 # if not DEBUG:
-#    SECURE_SSL_REDIRECT = True
-#    SESSION_COOKIE_SECURE = True
-#    CSRF_COOKIE_SECURE = True
+#    SECURE_SSL_REDIRECT = False
+#    SESSION_COOKIE_SECURE = False
+#    CSRF_COOKIE_SECURE = False
 #    SECURE_BROWSER_XSS_FILTER = True
 #    SECURE_CONTENT_TYPE_NOSNIFF = True
 #    X_FRAME_OPTIONS = 'DENY'
+     SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+     SESSION_COOKIE_AGE = 86400 
+
