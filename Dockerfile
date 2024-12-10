@@ -25,7 +25,7 @@ RUN useradd -m django && \
 COPY . .
 RUN chown -R django:django /app && \
     chmod -R 755 /app && \
-    chmod 777 /app /app/staticfiless
+    chmod 777 /app /app/staticfiles
 
 USER django
 EXPOSE 8000
