@@ -1,5 +1,8 @@
 {% extends "employees/base.html" %}
+{% load static %}
+
 {% block content %}
+
 <nav id="navbar">
     <a href="{% url 'employees:employee_list' %}">Employee List</a>
     <a href="{% url 'employees:employee_create_form' %}">Add Employee</a>
