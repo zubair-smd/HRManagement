@@ -3,26 +3,29 @@ import os
 from pathlib import Path
 from django.core.exceptions import ImproperlyConfigured
 
+
+env = environ.Env()
+
 # Build paths
 BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insure-)-q*gw@^c7)%0-_c84(5wl@8ecek%n$4yx_u%02p8ro5&os+^7
-')
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
+SECRET_KEY = env('DJANGO_SECRET_KEY')
 # Initialize environment variables
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
-# Secret key handling
-try:
-   with open(os.path.join(BASE_DIR, 'secrets.txt')) as f:
-       for line in f:
-           if line.startswith('DJANGO_SECRET_KEY='):
-               SECRET_KEY = line.split('=')[1].strip()
-               break
-except FileNotFoundError:
-   raise ImproperlyConfigured("secrets.txt file not found")
-except Exception as e:
-   raise ImproperlyConfigured(f"Error loading secret key: {str(e)}")
+# # Secret key handling
+# try:
+#    with open(os.path.join(BASE_DIR, 'secrets.txt')) as f:
+#        for line in f:
+#            if line.startswith('DJANGO_SECRET_KEY='):
+#                SECRET_KEY = line.split('=')[1].strip()
+#                break
+# except FileNotFoundError:
+#    raise ImproperlyConfigured("secrets.txt file not found")
+# except Exception as e:
+#    raise ImproperlyConfigured(f"Error loading secret key: {str(e)}")
 
 CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://127.0.0.1:8000', 'http://3.251.65.76:8000']
 
@@ -130,13 +133,14 @@ MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 
 # # Production Security Settings
-# if not DEBUG:
-#    SECURE_SSL_REDIRECT = False
-#    SESSION_COOKIE_SECURE = False
-#    CSRF_COOKIE_SECURE = False
-#    SECURE_BROWSER_XSS_FILTER = True
-#    SECURE_CONTENT_TYPE_NOSNIFF = True
-#    X_FRAME_OPTIONS = 'DENY'
-     SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-     SESSION_COOKIE_AGE = 86400 
+if not DEBUG:
+    
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'
+    SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+    SESSION_COOKIE_AGE = 86400 
 

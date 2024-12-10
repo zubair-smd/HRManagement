@@ -7,7 +7,7 @@ from employees.views import CustomLoginView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', CustomLoginView.as_view(), name='login'),
-    path('logout/', LogoutView.as_view(), name='logout'),
+    path('logout/', LogoutView.as_view(next_page='login'), name='logout'),  # Added proper name
     path('employees/', include('employees.urls')),
     path('', RedirectView.as_view(url='/login/', permanent=False)),
 ]

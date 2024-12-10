@@ -15,7 +15,7 @@
         <div class="header-right">
             <span class="welcome-text">Welcome, {{ user.username }}</span>
             <a href="{% url 'employees:employee_create_form' %}" class="btn-add">+ Add Employee</a>
-            <form method="post" action="{% url 'employees:logout' %}" class="logout-form">
+            <form method="post" action="{% url 'logout' %}" class="logout-form">  <!-- Changed from 'employees:logout' to 'logout' -->
                 {% csrf_token %}
                 <button type="submit" class="btn-logout">Logout</button>
             </form>
