@@ -1,22 +1,21 @@
+version: '3.8'
+
 services:
   web:
     build: .
+    container_name: hrmanagement
+    command: >
+      bash -c "python manage.py migrate &&
+              python manage.py collectstatic --noinput &&
+              gunicorn --bind 0.0.0.0:8000 --workers 3 HRManagement.wsgi:application"
+    volumes:
+      - .:/app
+      - ./staticfiles:/app/staticfiles
+      - ./media:/app/media
+      - ./db.sqlite3:/app/db.sqlite3
     ports:
       - "8000:8000"
-    volumes:
-      - ./staticfiles:/app/staticfiles
-      - static_volume:/app/static
-      - media_volume:/app/media
-      - ./db.sqlite3:/app/db.sqlite3
     environment:
       - DEBUG=True
-      - ALLOWED_HOSTS=*
       - DJANGO_SECRET_KEY=)-q*gw@^c7)%0-_c84(5wl@8ecek%n\$4yx_u%02p8ro5&os+^7
-    command: >
-      sh -c "python manage.py migrate &&
-             python manage.py collectstatic --noinput &&
-             gunicorn --bind 0.0.0.0:8000 --workers 3 HRManagement.wsgi:application"
-
-volumes:
-  static_volume:
-  media_volume:
+      - ALLOWED_HOSTS=localhost,127.0.0.1
