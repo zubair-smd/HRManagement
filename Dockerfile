@@ -10,15 +10,17 @@ WORKDIR /app
 
 # Install dependencies and system libraries
 RUN apt-get update && apt-get install -y \
-    sqlite3 libsqlite3-dev \
+    sqlite3 libsqlite3-dev gcc build-essential \
     && apt-get clean
 
 # Copy the requirements file
 COPY requirements.txt /app/
 
+# Debug step to verify contents of requirements.txt
+RUN cat /app/requirements.txt
+
 # Install Python dependencies
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
 # Copy the project files
 COPY . /app/
