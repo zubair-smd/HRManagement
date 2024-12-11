@@ -1,33 +1,30 @@
-FROM python:3.12-slim
+# Use an official Python image from DockerHub
+FROM python:3.9-slim
 
-ENV PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1 \
-    DEBUG=True \
-    ALLOWED_HOSTS=* \
-    DJANGO_SECRET_KEY=)-q*gw@^c7)%0-_c84(5wl@8ecek%n\$4yx_u%02p8ro5&os+^7
 
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# Set the working directory inside the container
 WORKDIR /app
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    build-essential \
-    python3-dev \
-    libpq-dev \
-    && rm -rf /var/lib/apt/lists/*
+# Install dependencies and system libraries (for SQLite, Python packages)
+RUN apt-get update && apt-get install -y \
+    sqlite3 \
+    && apt-get clean
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy the requirements.txt file into the container
+COPY requirements.txt /app/
 
-RUN useradd -m django && \
-    mkdir -p /app/static /app/media /app/staticfiles && \
-    chown -R django:django /app
+# Install Python dependencies
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
 
-COPY . .
-RUN chown -R django:django /app && \
-    chmod -R 755 /app && \
-    chmod 777 /app /app/staticfiles
+# Copy the entire project files into the container
+COPY . /app/
 
-USER django
+# Expose the default Django port (you can customize it)
 EXPOSE 8000
 
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "HRManagement.wsgi:application"]
+# Set the command to run the Django application
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
