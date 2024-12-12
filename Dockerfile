@@ -1,32 +1,30 @@
-# Use an official Python image
+# Use an official Python image from DockerHub
 FROM python:3.9-slim
 
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+# Set environment variables for Python
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
 # Set the working directory inside the container
 WORKDIR /app
 
-# Install dependencies and system libraries
+# Install dependencies and system libraries (for SQLite, Python packages)
 RUN apt-get update && apt-get install -y \
-    sqlite3 libsqlite3-dev gcc build-essential \
+    sqlite3 \
     && apt-get clean
 
-# Copy the requirements file
+# Copy the requirements.txt file into the container
 COPY requirements.txt /app/
 
-# Debug step to verify contents of requirements.txt
-RUN cat /app/requirements.txt
-
 # Install Python dependencies
-RUN pip install --upgrade pip && pip install -r requirements.txt
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
 
-# Copy the project files
+# Copy the entire project files into the container
 COPY . /app/
 
-# Expose Django's default port
+# Expose the default Django port (you can customize it)
 EXPOSE 8000
 
-# Run the Django application
+# Set the command to run the Django application
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
