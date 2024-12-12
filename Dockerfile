@@ -1,30 +1,43 @@
-# Use an official Python image from DockerHub
+# Use an official Python runtime as a parent image
 FROM python:3.9-slim
 
-# Set environment variables for Python
+# Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# Set the working directory inside the container
+# Set work directory
 WORKDIR /app
 
-# Install dependencies and system libraries (for SQLite, Python packages)
-RUN apt-get update && apt-get install -y \
-    sqlite3 \
-    && apt-get clean
+# Create a non-root user
+RUN addgroup --system django \
+    && adduser --system --ingroup django django
 
-# Copy the requirements.txt file into the container
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements first to leverage Docker cache
 COPY requirements.txt /app/
 
-# Install Python dependencies
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+# Install Python dependencies as non-root user
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the entire project files into the container
+# Copy project files
 COPY . /app/
 
-# Expose the default Django port (you can customize it)
+# Change ownership of the application directory
+RUN chown -R django:django /app
+
+# Switch to non-root user
+USER django
+
+# Any additional setup (e.g., database migrations, collecting static files)
+# RUN python manage.py migrate
+# RUN python manage.py collectstatic --noinput
+
+# Expose the port the app runs on
 EXPOSE 8000
 
-# Set the command to run the Django application
+# Command to run the application
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
